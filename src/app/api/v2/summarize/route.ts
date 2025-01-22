@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     console.log('Processing request for summarization API...');
 
-    // Validate environment variable
+
     if (!GEMINI_API_KEY) {
       return NextResponse.json(
         { error: 'Server misconfiguration: API key is missing.' },
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Parse and validate request body
+
     const body = await request.json();
     const validationResult = SummarizeRequestSchema.safeParse(body);
 
@@ -38,7 +38,6 @@ export async function POST(request: NextRequest) {
 
     const { input, output_language } = validationResult.data;
 
-    // Prepare API payload
     const payload = {
       contents: [
         {
@@ -47,7 +46,7 @@ export async function POST(request: NextRequest) {
       ],
     };
 
-    // Send request to Gemini API
+
     const apiResponse = await axios.post(
       `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,
       payload,
@@ -57,7 +56,7 @@ export async function POST(request: NextRequest) {
     console.log('Gemini API Response:', apiResponse.data);
 
     const candidate = apiResponse.data?.candidates?.[0];
-    const summary = candidate?.content?.text || candidate?.content; // Adjust based on the actual object structure
+    const summary = candidate?.content?.text || candidate?.content;
 
     if (!summary) {
         console.error('Invalid response structure:', apiResponse.data);
@@ -67,7 +66,6 @@ export async function POST(request: NextRequest) {
         );
     }
 
-    // Return the summarized content
     return NextResponse.json({ summary }, { status: 200 });
   } catch (error) {
     console.error('Error occurred while processing the request:', error);

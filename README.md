@@ -13,7 +13,7 @@ The route is located at:
 ## Endpoint
 ### URL
 ```
-/api/summarize
+/api/v1/summarize
 ```
 
 ### Method

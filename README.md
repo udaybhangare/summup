@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Summarize API Endpoint
 
-## Getting Started
+This documentation provides an overview of the `POST` endpoint for summarizing text or URL content using the ApyHub API. The endpoint is implemented in Next.js with proper validation and error handling.
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Folder Structure
+The route is located at:
+```
+/src/app/api/summarize/route.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Endpoint
+### URL
+```
+/api/summarize
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Method
+```
+POST
+```
 
-## Learn More
+### Request Body
+The request body must be a JSON object with the following structure:
 
-To learn more about Next.js, take a look at the following resources:
+| Field           | Type   | Required | Description                                           |
+|------------------|--------|----------|-------------------------------------------------------|
+| `input`         | string | Yes      | The text or URL to summarize. Must be non-empty.     |
+| `summary_length`| string | No       | Desired length of the summary (`short`, `medium`, or `long`). Defaults to `short`. |
+| `output_language` | string | No     | ISO code for the output language (e.g., `en`, `fr`). Defaults to `en`. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Example Request Body
+```json
+{
+  "input": "https://example.com/article",
+  "summary_length": "medium",
+  "output_language": "en"
+}
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Response
+### Success Response
+On success, the server responds with a JSON object containing the summary:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Field     | Type   | Description                       |
+|-----------|--------|-----------------------------------|
+| `summary` | string | The summarized text or URL content. |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Example Success Response
+```json
+{
+  "summary": "This is a concise summary of the provided content."
+}
+```
+
+### Error Responses
+| HTTP Code | Message                                             |
+|-----------|-----------------------------------------------------|
+| 400       | Input validation failed.                           |
+| 500       | Server misconfiguration or unexpected error.       |
+
+#### Example Error Response
+```json
+{
+  "error": "Input must be a non-empty string."
+}
+```
+
+---
+
+## Features
+### 1. **Validation**
+- Uses Zod for schema validation to ensure the input is structured correctly.
+- Validates that the `input` is non-empty and the `summary_length` is within allowed values (`short`, `medium`, `long`).
+- Defaults are provided for optional fields.
+
+### 2. **Error Handling**
+- Handles Axios errors to return meaningful messages from the ApyHub API.
+- Handles missing API tokens with a `500` status code.
+- Distinguishes between Axios errors and unexpected errors.
+
+### 3. **Dynamic Endpoint Selection**
+- Automatically determines whether the `input` is a URL or text.
+- Uses appropriate ApyHub API endpoints based on the `input` type.
+
+---
+
+## Environment Variables
+### Required Environment Variables
+| Variable            | Description                  |
+|---------------------|------------------------------|
+| `APYHUB_API_TOKEN`  | The API token for ApyHub.    |
+
+---
+
+## Example Setup
+### Install Dependencies
+```bash
+pnpm install axios zod
+```
+
+### Start Development Server
+Run the Next.js development server:
+```bash
+pnpm dev
+```
+
+---
+
+## Notes
+- Ensure that the `APYHUB_API_TOKEN` is stored securely in a `.env` file.
+- The API handles a maximum input size of 16,385 tokens (~12,000 words) for text-based summaries.
+- The API respects ISO language codes for output summaries.
+
+---
+
+## Potential Improvements
+- Add rate limiting to avoid API misuse.
+- Implement caching for frequently requested inputs.
+- Extend support for additional summary output formats.
+

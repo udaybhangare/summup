@@ -5,7 +5,7 @@ This documentation provides an overview of the `POST` endpoint for summarizing t
 ## Folder Structure
 The route is located at:
 ```
-/src/app/api/summarize/route.ts
+/src/app/api/v1/summarize/route.ts
 ```
 
 ---

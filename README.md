@@ -1,124 +1,108 @@
-# Summarize API Endpoint
+### Documentation: Gemini Summarization API (Version 2)
 
-This documentation provides an overview of the `POST` endpoint for summarizing text or URL content using the ApyHub API. The endpoint is implemented in Next.js with proper validation and error handling.
-
-## Folder Structure
-The route is located at:
-```
-/src/app/api/v1/summarize/route.ts
-```
+This API provides systematic summaries of the input content using the Gemini language model. The following documentation outlines the endpoints, request structure, and response format.
 
 ---
 
-## Endpoint
-### URL
-```
-/api/v1/summarize
-```
+#### **Base URL**
+`/api/v2/summarize`
 
-### Method
-```
-POST
-```
+---
 
-### Request Body
-The request body must be a JSON object with the following structure:
+### **HTTP Method**
+`POST`
 
-| Field           | Type   | Required | Description                                           |
-|------------------|--------|----------|-------------------------------------------------------|
-| `input`         | string | Yes      | The text or URL to summarize. Must be non-empty.     |
-| `summary_length`| string | No       | Desired length of the summary (`short`, `medium`, or `long`). Defaults to `short`. |
-| `output_language` | string | No     | ISO code for the output language (e.g., `en`, `fr`). Defaults to `en`. |
+---
 
-#### Example Request Body
+### **Request Headers**
+- `Content-Type: application/json`
+
+---
+
+### **Environment Variables**
+- `GEMINI_API_KEY`: The API key required to authenticate with the Gemini API.
+
+---
+
+### **Request Body**
+The request body should be a JSON object validated against the following schema:
+
+| Field             | Type    | Required | Default | Description                           |
+|-------------------|---------|----------|---------|---------------------------------------|
+| `input`           | String  | Yes      | N/A     | The text content to summarize. Must be non-empty. |
+| `output_language` | String  | No       | `en`    | The desired output language for the summary. |
+
+#### **Example Request Body**
 ```json
 {
-  "input": "https://example.com/article",
-  "summary_length": "medium",
+  "input": "Explain how AI works",
   "output_language": "en"
 }
 ```
 
 ---
 
-## Response
-### Success Response
-On success, the server responds with a JSON object containing the summary:
+### **Response**
+The response is a JSON object containing the summarized content.
 
-| Field     | Type   | Description                       |
-|-----------|--------|-----------------------------------|
-| `summary` | string | The summarized text or URL content. |
+| Field     | Type   | Description                                   |
+|-----------|--------|-----------------------------------------------|
+| `summary` | String | The generated summary of the provided input.  |
 
-#### Example Success Response
+#### **Example Response**
 ```json
 {
-  "summary": "This is a concise summary of the provided content."
-}
-```
-
-### Error Responses
-| HTTP Code | Message                                             |
-|-----------|-----------------------------------------------------|
-| 400       | Input validation failed.                           |
-| 500       | Server misconfiguration or unexpected error.       |
-
-#### Example Error Response
-```json
-{
-  "error": "Input must be a non-empty string."
+  "summary": "Artificial Intelligence (AI) is the simulation of human intelligence by machines, enabling them to perform tasks such as learning, reasoning, and decision-making."
 }
 ```
 
 ---
 
-## Features
-### 1. **Validation**
-- Uses Zod for schema validation to ensure the input is structured correctly.
-- Validates that the `input` is non-empty and the `summary_length` is within allowed values (`short`, `medium`, `long`).
-- Defaults are provided for optional fields.
+### **Error Handling**
+Errors are returned as JSON objects with an appropriate HTTP status code.
 
-### 2. **Error Handling**
-- Handles Axios errors to return meaningful messages from the ApyHub API.
-- Handles missing API tokens with a `500` status code.
-- Distinguishes between Axios errors and unexpected errors.
+| HTTP Status Code | Description                                                                                   |
+|------------------|-----------------------------------------------------------------------------------------------|
+| 400              | Validation error in the request body.                                                        |
+| 500              | Server-side error (e.g., missing API key, unexpected response from Gemini API, or other issues). |
 
-### 3. **Dynamic Endpoint Selection**
-- Automatically determines whether the `input` is a URL or text.
-- Uses appropriate ApyHub API endpoints based on the `input` type.
-
----
-
-## Environment Variables
-### Required Environment Variables
-| Variable            | Description                  |
-|---------------------|------------------------------|
-| `APYHUB_API_TOKEN`  | The API token for ApyHub.    |
-
----
-
-## Example Setup
-### Install Dependencies
-```bash
-pnpm install axios zod
-```
-
-### Start Development Server
-Run the Next.js development server:
-```bash
-pnpm dev
+#### **Example Error Response**
+```json
+{
+  "error": "Validation failed: Input must be a non-empty string."
+}
 ```
 
 ---
 
-## Notes
-- Ensure that the `APYHUB_API_TOKEN` is stored securely in a `.env` file.
-- The API handles a maximum input size of 16,385 tokens (~12,000 words) for text-based summaries.
-- The API respects ISO language codes for output summaries.
+### **Detailed Workflow**
+1. **Request Validation**:
+   - Validates the input using `zod` to ensure the request contains the required fields and values are properly formatted.
+
+2. **Prepare Payload**:
+   - Combines the default prompt and input text, including the specified `output_language`.
+
+3. **API Call to Gemini**:
+   - Sends a POST request to the Gemini API using `axios` with the constructed payload.
+
+4. **Handle Response**:
+   - Parses and extracts the summary from the API response.
+   - Returns the summary to the client or an error if the response format is invalid.
+
+5. **Error Handling**:
+   - Distinguishes between client-side validation errors and server-side or network issues.
+   - Logs unexpected errors for debugging.
 
 ---
 
-## Potential Improvements
-- Add rate limiting to avoid API misuse.
-- Implement caching for frequently requested inputs.
-- Extend support for additional summary output formats.
+### **Example Usage with cURL**
+```bash
+curl -X POST https://yourdomain.com/api/v2/summarize \
+-H "Content-Type: application/json" \
+-d '{
+  "input": "Explain how AI works",
+  "output_language": "en"
+}'
+```
 
+---

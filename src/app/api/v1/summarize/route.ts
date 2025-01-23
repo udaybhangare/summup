@@ -32,7 +32,6 @@ const isValidUrl = (input: string): boolean => {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Request received:', request.body);
 
     if (!APYHUB_API_TOKEN) {
       return NextResponse.json(

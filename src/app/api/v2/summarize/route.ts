@@ -53,10 +53,10 @@ export async function POST(request: NextRequest) {
       { headers: { 'Content-Type': 'application/json' } }
     );
 
-    console.log('Gemini API Response:', apiResponse.data);
-
     const candidate = apiResponse.data?.candidates?.[0];
     const summary = candidate?.content?.text || candidate?.content;
+
+    console.log('Summary:', summary);
 
     if (!summary) {
         console.error('Invalid response structure:', apiResponse.data);

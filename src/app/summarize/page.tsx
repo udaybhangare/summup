@@ -1,6 +1,5 @@
 "use client"
 
-
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Mic, Image, Send, Paperclip, Sparkles } from "lucide-react"
@@ -9,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { ChatBubble } from "@/components/ui/chat-bubble"
 import { TypingIndicator } from "@/components/ui/typing-indicator"
 import { ChatHeader } from "@/components/ui/chat-header"
+import { CustomUserButton } from "@/components/ui/custom-user-button"
 
 interface Message {
   id: string
@@ -73,7 +73,7 @@ export default function SummarizePage() {
       if (data.error) {
         throw new Error(data.error)
       }
-      
+
       if (data.summary) {
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
@@ -107,10 +107,13 @@ export default function SummarizePage() {
         className="rounded-2xl overflow-hidden border bg-card shadow-xl"
       >
         <div className="flex flex-col h-[700px]">
-          <ChatHeader />
+          <div className="flex justify-between items-center p-4 border-b">
+            <ChatHeader />
+            <CustomUserButton />
+          </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.map((message) => (
+            {messages.map((message) => (
               <ChatBubble
                 key={message.id}
                 content={message.content}
@@ -154,7 +157,7 @@ export default function SummarizePage() {
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
-      </form>
+            </form>
           </motion.div>
         </div>
       </motion.div>

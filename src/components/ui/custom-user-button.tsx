@@ -22,7 +22,7 @@ export function CustomUserButton() {
   if (!user) return null
 
   const handleSignOut = async () => {
-    await signOut()
+    signOut()
     router.push("/") // Redirect to the landing page after signing out
   }
 

@@ -1,8 +1,10 @@
 "use client"
 
-import { useState } from "react"
+// import { useState } from "react"
 import { useUser, useClerk } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,17 +13,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 export function CustomUserButton() {
   const { user } = useUser()
   const { signOut } = useClerk()
-  const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   if (!user) return null
 
+  const handleSignOut = async () => {
+    await signOut()
+    router.push("/") // Redirect to the landing page after signing out
+  }
+
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
@@ -32,16 +38,10 @@ export function CustomUserButton() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
           <p className="text-sm font-medium leading-none">{user.fullName}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.primaryEmailAddress?.emailAddress}</p>
-          </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* <DropdownMenuItem onClick={() => (window.location.href = "/user-profile")}>Profile</DropdownMenuItem>
-        <DropdownMenuItem onClick={() => (window.location.href = "/settings")}>Settings</DropdownMenuItem>
-        <DropdownMenuSeparator /> */}
-        <DropdownMenuItem className="text-red-600" onClick={() => signOut()}>
+        <DropdownMenuItem className="text-red-600" onClick={handleSignOut}>
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>

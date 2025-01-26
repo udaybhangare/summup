@@ -144,7 +144,7 @@ export default function SummarizePage() {
                 <Sparkles className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               </div>
               <div className="flex items-center space-x-2">
-                <Button type="button" variant="outline" size="icon" className="rounded-full">
+                {/* <Button type="button" variant="outline" size="icon" className="rounded-full">
                   <Paperclip className="h-4 w-4" />
                 </Button>
                 <Button type="button" variant="outline" size="icon" className="rounded-full">
@@ -152,7 +152,7 @@ export default function SummarizePage() {
                 </Button>
                 <Button type="button" variant="outline" size="icon" className="rounded-full">
                   <Mic className="h-4 w-4" />
-                </Button>
+                </Button> */}
                 <Button type="submit" size="icon" className="rounded-full" disabled={!input.trim() || isLoading}>
                   <Send className="h-4 w-4" />
                 </Button>

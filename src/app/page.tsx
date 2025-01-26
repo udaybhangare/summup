@@ -47,7 +47,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <header
         ref={headerRef}
-        className="px-4 lg:px-6 h-14 flex items-center fixed w-full bg-white/80 backdrop-blur-md z-50"
+        className="px-4 lg:px-6 h-14 flex items-center fixed w-full bg-gray-400 backdrop-blur-md z-50"
       >
         <Link className="flex items-center justify-center" href="/">
           <Sparkles className="h-6 w-6" />
@@ -163,7 +163,7 @@ export default function Home() {
         </section>
       </main>
       <footer className="w-full border-t bg-white">
-        <div className="container flex flex-col gap-4 py-6 px-4 md:px-6">
+        <div className="container flex flex-auto justify-between gap-4 py-6 px-4 md:px-6">
           <p className="text-xs text-center sm:text-left text-gray-500 dark:text-gray-400">
             © 2024 Summup. Created by Uday Bhangare, Aditya Bendal, Soumit Das, Ved Alve
           </p>

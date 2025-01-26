@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Mic, Image, Send, Paperclip, Sparkles } from "lucide-react"
+import {  Send,  Sparkles } from "lucide-react"
+// Mic, Image, Paperclip,
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChatBubble } from "@/components/ui/chat-bubble"

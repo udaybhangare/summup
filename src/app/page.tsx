@@ -165,7 +165,7 @@ export default function Home() {
       <footer className="w-full border-t bg-white">
         <div className="container flex flex-auto justify-between gap-4 py-6 px-4 md:px-6">
           <p className="text-xs text-center sm:text-left text-gray-500 dark:text-gray-400">
-            © 2024 Summup. Created by Uday Bhangare, Aditya Bendal, Soumit Das, Ved Alve
+            © 2024 Summup. Created by EpicPixels
           </p>
           <nav className="flex justify-center sm:justify-start gap-4 sm:gap-6">
             <Link className="text-xs hover:underline underline-offset-4" href="#">
